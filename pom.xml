@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.matthewdeanmartin</groupId>
+  <artifactId>pathkeeper-parent</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>pathkeeper-parent</name>
+  <description>PATH manager — Java port</description>
+
+  <modules>
+    <module>pathkeeper-core</module>
+    <module>pathkeeper-cli</module>
+    <module>pathkeeper-gui</module>
+    <module>pathkeeper-dist</module>
+  </modules>
+
+  <properties>
+    <java.version>21</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!-- dependency versions -->
+    <picocli.version>4.7.6</picocli.version>
+    <jackson.version>2.17.2</jackson.version>
+    <toml4j.version>0.7.2</toml4j.version>
+    <jna.version>5.14.0</jna.version>
+    <flatlaf.version>3.5</flatlaf.version>
+    <junit.version>5.11.0</junit.version>
+    <assertj.version>3.26.3</assertj.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- internal modules -->
+      <dependency>
+        <groupId>com.matthewdeanmartin</groupId>
+        <artifactId>pathkeeper-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.matthewdeanmartin</groupId>
+        <artifactId>pathkeeper-cli</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.matthewdeanmartin</groupId>
+        <artifactId>pathkeeper-gui</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!-- CLI -->
+      <dependency>
+        <groupId>info.picocli</groupId>
+        <artifactId>picocli</artifactId>
+        <version>${picocli.version}</version>
+      </dependency>
+
+      <!-- JSON (backup store) -->
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jsr310</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <!-- TOML (config / known_tools.toml) -->
+      <dependency>
+        <groupId>com.moandjiezana.toml</groupId>
+        <artifactId>toml4j</artifactId>
+        <version>${toml4j.version}</version>
+      </dependency>
+
+      <!-- Windows registry access (no native binary needed) -->
+      <dependency>
+        <groupId>net.java.dev.jna</groupId>
+        <artifactId>jna</artifactId>
+        <version>${jna.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.java.dev.jna</groupId>
+        <artifactId>jna-platform</artifactId>
+        <version>${jna.version}</version>
+      </dependency>
+
+      <!-- modern Swing look-and-feel -->
+      <dependency>
+        <groupId>com.formdev</groupId>
+        <artifactId>flatlaf</artifactId>
+        <version>${flatlaf.version}</version>
+      </dependency>
+
+      <!-- testing -->
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${assertj.version}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.13.0</version>
+          <configuration>
+            <annotationProcessorPaths>
+              <!-- picocli generates @Command metadata at compile time -->
+              <path>
+                <groupId>info.picocli</groupId>
+                <artifactId>picocli-codegen</artifactId>
+                <version>${picocli.version}</version>
+              </path>
+            </annotationProcessorPaths>
+            <compilerArgs>
+              <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
+            </compilerArgs>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.3.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>3.6.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

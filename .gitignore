@@ -1,3 +1,9 @@
+target/
+bin/pathkeeper.jar
+.idea/
+*.iml
+.DS_Store
+
 # Compiled class file
 *.class
 
