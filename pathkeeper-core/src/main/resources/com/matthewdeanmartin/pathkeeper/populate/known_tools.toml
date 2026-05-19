@@ -1,0 +1,622 @@
+# ---------------------------------------------------------------------------
+# Programming Languages
+# ---------------------------------------------------------------------------
+
+[[tools]]
+name = "Python"
+category = "Programming Languages"
+os = "windows"
+executables = ["python", "python3"]
+patterns = [
+  "C:\\Python3*",
+  "C:\\Python3*\\Scripts",
+  "%LOCALAPPDATA%\\Programs\\Python\\Python3*",
+  "%LOCALAPPDATA%\\Programs\\Python\\Python3*\\Scripts",
+  "%APPDATA%\\Python\\Python3*\\Scripts",
+  "%USERPROFILE%\\scoop\\apps\\python\\current",
+  "%USERPROFILE%\\scoop\\apps\\python\\current\\Scripts",
+  "%LOCALAPPDATA%\\Microsoft\\WindowsApps",
+]
+
+[[tools]]
+name = "Node.js"
+category = "Programming Languages"
+os = "all"
+executables = ["node"]
+patterns = [
+  "%ProgramFiles%\\nodejs",
+  "%ProgramFiles(x86)%\\nodejs",
+  "%APPDATA%\\nvm\\v*",
+  "%USERPROFILE%\\scoop\\apps\\nodejs\\current",
+  "/usr/local/bin",
+  "$HOME/.nvm/versions/node/*/bin",
+]
+
+[[tools]]
+name = "Go"
+category = "Programming Languages"
+os = "all"
+executables = ["go"]
+patterns = [
+  "%ProgramFiles%\\Go\\bin",
+  "%ProgramW6432%\\Go\\bin",
+  "C:\\Go\\bin",
+  "%USERPROFILE%\\scoop\\apps\\go\\current\\bin",
+  "%USERPROFILE%\\go\\bin",
+  "/usr/local/go/bin",
+  "$HOME/go/bin",
+]
+
+[[tools]]
+name = "Rust"
+category = "Programming Languages"
+os = "all"
+executables = ["cargo", "rustc"]
+patterns = [
+  "%USERPROFILE%\\.cargo\\bin",
+  "$HOME/.cargo/bin",
+]
+
+[[tools]]
+name = "Ruby"
+category = "Programming Languages"
+os = "all"
+executables = ["ruby"]
+patterns = [
+  "C:\\Ruby*\\bin",
+  "%ProgramFiles%\\Ruby*\\bin",
+  "%USERPROFILE%\\scoop\\apps\\ruby\\current\\bin",
+  "/opt/rubies/*/bin",
+  "$HOME/.rbenv/shims",
+]
+
+[[tools]]
+name = "Java"
+category = "Programming Languages"
+os = "all"
+executables = ["java", "javac"]
+patterns = [
+  "%ProgramFiles%\\Java\\*\\bin",
+  "%ProgramFiles%\\Eclipse Adoptium\\*\\bin",
+  "%ProgramFiles%\\Microsoft\\jdk-*\\bin",
+  "%ProgramFiles%\\BellSoft\\LibericaJDK-*\\bin",
+  "%ProgramFiles%\\Zulu\\zulu-*\\bin",
+  "%USERPROFILE%\\scoop\\apps\\openjdk\\current\\bin",
+  "/Library/Java/JavaVirtualMachines/*/Contents/Home/bin",
+  "/usr/lib/jvm/*/bin",
+]
+
+[[tools]]
+name = ".NET"
+category = "Programming Languages"
+os = "all"
+executables = ["dotnet"]
+patterns = [
+  "%ProgramFiles%\\dotnet",
+  "%ProgramFiles(x86)%\\dotnet",
+  "/usr/local/share/dotnet",
+  "/usr/share/dotnet",
+]
+
+[[tools]]
+name = "PHP"
+category = "Programming Languages"
+os = "all"
+patterns = [
+  "C:\\php",
+  "%ProgramFiles%\\PHP\\v*",
+  "%USERPROFILE%\\scoop\\apps\\php\\current",
+  "/opt/homebrew/bin",
+  "/usr/bin",
+]
+
+[[tools]]
+name = "Dart"
+category = "Programming Languages"
+os = "all"
+patterns = [
+  "%LOCALAPPDATA%\\Pub\\Cache\\bin",
+  "%ProgramFiles%\\Dart\\dart-sdk\\bin",
+  "$HOME/.pub-cache/bin",
+]
+
+[[tools]]
+name = "Deno"
+category = "Programming Languages"
+os = "all"
+patterns = [
+  "%USERPROFILE%\\.deno\\bin",
+  "$HOME/.deno/bin",
+]
+
+[[tools]]
+name = "Bun"
+category = "Programming Languages"
+os = "all"
+patterns = [
+  "%USERPROFILE%\\.bun\\bin",
+  "$HOME/.bun/bin",
+]
+
+[[tools]]
+name = "Zig"
+category = "Programming Languages"
+os = "all"
+patterns = [
+  "%LOCALAPPDATA%\\zig",
+  "%USERPROFILE%\\scoop\\apps\\zig\\current",
+  "$HOME/.local/bin",
+  "/usr/local/bin",
+]
+
+[[tools]]
+name = "Julia"
+category = "Programming Languages"
+os = "all"
+patterns = [
+  "%ProgramFiles%\\Julia-*\\bin",
+  "%LOCALAPPDATA%\\Programs\\Julia-*\\bin",
+  "%USERPROFILE%\\scoop\\apps\\julia\\current\\bin",
+  "/Applications/Julia-*.app/Contents/Resources/julia/bin",
+  "$HOME/.juliaup/bin",
+]
+
+[[tools]]
+name = "Elixir"
+category = "Programming Languages"
+os = "all"
+patterns = [
+  "%USERPROFILE%\\scoop\\apps\\elixir\\current\\bin",
+  "%ProgramFiles%\\Elixir\\bin",
+  "/usr/local/bin",
+  "$HOME/.mix/escripts",
+]
+
+[[tools]]
+name = "Erlang"
+category = "Programming Languages"
+os = "all"
+patterns = [
+  "%ProgramFiles%\\erl-*\\bin",
+  "%USERPROFILE%\\scoop\\apps\\erlang\\current\\bin",
+  "/usr/local/bin",
+]
+
+[[tools]]
+name = "Perl"
+category = "Programming Languages"
+os = "windows"
+patterns = [
+  "C:\\Strawberry\\perl\\bin",
+  "C:\\Strawberry\\c\\bin",
+  "%ProgramFiles%\\Perl\\bin",
+  "%USERPROFILE%\\scoop\\apps\\perl\\current\\perl\\bin",
+]
+
+[[tools]]
+name = "Lua"
+category = "Programming Languages"
+os = "windows"
+patterns = [
+  "C:\\Lua*\\bin",
+  "%ProgramFiles%\\Lua*",
+  "%USERPROFILE%\\scoop\\apps\\lua\\current\\bin",
+]
+
+# ---------------------------------------------------------------------------
+# Developer Tools
+# ---------------------------------------------------------------------------
+
+[[tools]]
+name = "Git"
+category = "Developer Tools"
+os = "all"
+executables = ["git"]
+patterns = [
+  "%ProgramFiles%\\Git\\cmd",
+  "%ProgramFiles%\\Git\\bin",
+  "%ProgramFiles%\\Git\\usr\\bin",
+  "%USERPROFILE%\\scoop\\apps\\git\\current\\cmd",
+  "/usr/local/bin",
+  "/usr/bin",
+]
+
+[[tools]]
+name = "GitHub CLI"
+category = "Developer Tools"
+os = "all"
+executables = ["gh"]
+patterns = [
+  "%ProgramFiles%\\GitHub CLI",
+  "%USERPROFILE%\\scoop\\apps\\gh\\current\\bin",
+  "/usr/local/bin",
+  "/opt/homebrew/bin",
+]
+
+[[tools]]
+name = "Docker"
+category = "Developer Tools"
+os = "all"
+executables = ["docker"]
+patterns = [
+  "%ProgramFiles%\\Docker\\Docker\\resources\\bin",
+  "%ProgramFiles%\\Docker\\Docker\\resources",
+  "/Applications/Docker.app/Contents/Resources/bin",
+  "/usr/local/bin",
+]
+
+[[tools]]
+name = "kubectl"
+category = "Developer Tools"
+os = "all"
+patterns = [
+  "%USERPROFILE%\\bin",
+  "%USERPROFILE%\\scoop\\apps\\kubectl\\current",
+  "$HOME/bin",
+  "/usr/local/bin",
+]
+
+[[tools]]
+name = "Helm"
+category = "Developer Tools"
+os = "all"
+patterns = [
+  "%USERPROFILE%\\bin",
+  "%USERPROFILE%\\scoop\\apps\\helm\\current",
+  "$HOME/bin",
+  "/usr/local/bin",
+]
+
+[[tools]]
+name = "Minikube"
+category = "Developer Tools"
+os = "all"
+patterns = [
+  "%USERPROFILE%\\bin",
+  "%USERPROFILE%\\scoop\\apps\\minikube\\current",
+  "$HOME/bin",
+  "/usr/local/bin",
+]
+
+[[tools]]
+name = "Terraform"
+category = "Developer Tools"
+os = "all"
+patterns = [
+  "%USERPROFILE%\\bin",
+  "%USERPROFILE%\\scoop\\apps\\terraform\\current",
+  "$HOME/bin",
+  "/usr/local/bin",
+]
+
+[[tools]]
+name = "VS Code"
+category = "Developer Tools"
+os = "all"
+executables = ["code"]
+patterns = [
+  "%LOCALAPPDATA%\\Programs\\Microsoft VS Code\\bin",
+  "%ProgramFiles%\\Microsoft VS Code\\bin",
+  "/Applications/Visual Studio Code.app/Contents/Resources/app/bin",
+  "/usr/share/code/bin",
+]
+
+[[tools]]
+name = "Windows Terminal"
+category = "Developer Tools"
+os = "windows"
+patterns = [
+  "%LOCALAPPDATA%\\Microsoft\\WindowsApps",
+]
+
+[[tools]]
+name = "PowerShell"
+category = "Developer Tools"
+os = "windows"
+patterns = [
+  "%ProgramFiles%\\PowerShell\\*",
+  "%USERPROFILE%\\scoop\\apps\\pwsh\\current",
+]
+
+[[tools]]
+name = "Vim"
+category = "Developer Tools"
+os = "windows"
+patterns = [
+  "%ProgramFiles%\\Vim\\vim*",
+  "%USERPROFILE%\\scoop\\apps\\vim\\current",
+]
+
+[[tools]]
+name = "Neovim"
+category = "Developer Tools"
+os = "windows"
+patterns = [
+  "%ProgramFiles%\\Neovim\\bin",
+  "%LOCALAPPDATA%\\Programs\\Neovim\\bin",
+  "%USERPROFILE%\\scoop\\apps\\neovim\\current\\bin",
+]
+
+[[tools]]
+name = "make"
+category = "Developer Tools"
+os = "windows"
+patterns = [
+  "C:\\Program Files (x86)\\GnuWin32\\bin",
+  "%USERPROFILE%\\scoop\\apps\\make\\current\\bin",
+]
+
+[[tools]]
+name = "CMake"
+category = "Developer Tools"
+os = "windows"
+patterns = [
+  "%ProgramFiles%\\CMake\\bin",
+  "%ProgramFiles(x86)%\\CMake\\bin",
+  "%USERPROFILE%\\scoop\\apps\\cmake\\current\\bin",
+]
+
+[[tools]]
+name = "LLVM / Clang"
+category = "Developer Tools"
+os = "windows"
+patterns = [
+  "%ProgramFiles%\\LLVM\\bin",
+  "%USERPROFILE%\\scoop\\apps\\llvm\\current\\bin",
+]
+
+[[tools]]
+name = "Android SDK"
+category = "Developer Tools"
+os = "all"
+patterns = [
+  "%LOCALAPPDATA%\\Android\\Sdk\\platform-tools",
+  "%LOCALAPPDATA%\\Android\\Sdk\\tools",
+  "%LOCALAPPDATA%\\Android\\Sdk\\emulator",
+  "$HOME/Library/Android/sdk/platform-tools",
+  "$HOME/Android/Sdk/platform-tools",
+]
+
+[[tools]]
+name = "Flutter"
+category = "Developer Tools"
+os = "all"
+executables = ["flutter"]
+patterns = [
+  "%LOCALAPPDATA%\\Programs\\flutter\\bin",
+  "C:\\flutter\\bin",
+  "%USERPROFILE%\\flutter\\bin",
+  "$HOME/flutter/bin",
+  "/usr/local/flutter/bin",
+]
+
+# ---------------------------------------------------------------------------
+# Cloud & DevOps
+# ---------------------------------------------------------------------------
+
+[[tools]]
+name = "AWS CLI"
+category = "Cloud & DevOps"
+os = "all"
+executables = ["aws"]
+patterns = [
+  "%ProgramFiles%\\Amazon\\AWSCLIV2",
+  "%LOCALAPPDATA%\\Programs\\Python\\Python3*\\Scripts",
+  "/usr/local/bin",
+  "/usr/bin",
+]
+
+[[tools]]
+name = "Azure CLI"
+category = "Cloud & DevOps"
+os = "all"
+executables = ["az"]
+patterns = [
+  "%ProgramFiles%\\Microsoft SDKs\\Azure\\CLI2\\wbin",
+  "%ProgramFiles(x86)%\\Microsoft SDKs\\Azure\\CLI2\\wbin",
+  "/usr/local/bin",
+  "/usr/bin",
+]
+
+[[tools]]
+name = "Google Cloud CLI"
+category = "Cloud & DevOps"
+os = "all"
+executables = ["gcloud"]
+patterns = [
+  "%LOCALAPPDATA%\\Google\\Cloud SDK\\google-cloud-sdk\\bin",
+  "%ProgramFiles%\\Google\\Cloud SDK\\google-cloud-sdk\\bin",
+  "$HOME/google-cloud-sdk/bin",
+  "/usr/local/google-cloud-sdk/bin",
+]
+
+[[tools]]
+name = "Pulumi"
+category = "Cloud & DevOps"
+os = "all"
+executables = ["pulumi"]
+patterns = [
+  "%USERPROFILE%\\.pulumi\\bin",
+  "$HOME/.pulumi/bin",
+]
+
+# ---------------------------------------------------------------------------
+# Databases
+# ---------------------------------------------------------------------------
+
+[[tools]]
+name = "PostgreSQL"
+category = "Databases"
+os = "all"
+executables = ["psql"]
+patterns = [
+  "%ProgramFiles%\\PostgreSQL\\*\\bin",
+  "%USERPROFILE%\\scoop\\apps\\postgresql\\current\\bin",
+  "/Library/PostgreSQL/*/bin",
+  "/usr/lib/postgresql/*/bin",
+  "/opt/homebrew/opt/postgresql*/bin",
+]
+
+[[tools]]
+name = "MySQL"
+category = "Databases"
+os = "all"
+executables = ["mysql"]
+patterns = [
+  "%ProgramFiles%\\MySQL\\MySQL Server *\\bin",
+  "%USERPROFILE%\\scoop\\apps\\mysql\\current\\bin",
+  "/usr/local/mysql/bin",
+  "/usr/bin",
+  "/opt/homebrew/opt/mysql*/bin",
+]
+
+[[tools]]
+name = "MongoDB"
+category = "Databases"
+os = "all"
+patterns = [
+  "%ProgramFiles%\\MongoDB\\Server\\*\\bin",
+  "%USERPROFILE%\\scoop\\apps\\mongodb\\current\\bin",
+  "/usr/local/bin",
+  "/opt/homebrew/bin",
+]
+
+[[tools]]
+name = "SQLite"
+category = "Databases"
+os = "all"
+patterns = [
+  "%ProgramFiles%\\SQLite",
+  "%USERPROFILE%\\scoop\\apps\\sqlite\\current",
+  "/usr/bin",
+  "/opt/homebrew/bin",
+]
+
+[[tools]]
+name = "Redis"
+category = "Databases"
+os = "all"
+patterns = [
+  "%ProgramFiles%\\Redis",
+  "%USERPROFILE%\\scoop\\apps\\redis\\current",
+  "/usr/bin",
+  "/usr/local/bin",
+  "/opt/homebrew/bin",
+]
+
+# ---------------------------------------------------------------------------
+# Package Managers
+# ---------------------------------------------------------------------------
+
+[[tools]]
+name = "Scoop"
+category = "Package Managers"
+os = "windows"
+patterns = [
+  "%USERPROFILE%\\scoop\\shims",
+]
+
+[[tools]]
+name = "Chocolatey"
+category = "Package Managers"
+os = "windows"
+patterns = [
+  "%ALLUSERSPROFILE%\\chocolatey\\bin",
+  "C:\\ProgramData\\chocolatey\\bin",
+]
+
+[[tools]]
+name = "pipx"
+category = "Package Managers"
+os = "all"
+patterns = [
+  "%USERPROFILE%\\.local\\bin",
+  "%APPDATA%\\Python\\Scripts",
+  "$HOME/.local/bin",
+]
+
+[[tools]]
+name = "Composer"
+category = "Package Managers"
+os = "all"
+patterns = [
+  "%APPDATA%\\Composer\\vendor\\bin",
+  "$HOME/.config/composer/vendor/bin",
+  "$HOME/.composer/vendor/bin",
+]
+
+[[tools]]
+name = "pnpm"
+category = "Package Managers"
+os = "all"
+patterns = [
+  "%APPDATA%\\npm",
+  "%LOCALAPPDATA%\\pnpm",
+  "$HOME/.local/share/pnpm",
+  "/usr/local/bin",
+]
+
+[[tools]]
+name = "Homebrew"
+category = "Package Managers"
+os = "darwin"
+patterns = [
+  "/opt/homebrew/bin",
+  "/opt/homebrew/sbin",
+  "/usr/local/bin",
+]
+
+[[tools]]
+name = "Snap"
+category = "Package Managers"
+os = "linux"
+patterns = [
+  "/snap/bin",
+]
+
+[[tools]]
+name = "Flatpak"
+category = "Package Managers"
+os = "linux"
+patterns = [
+  "/var/lib/flatpak/exports/bin",
+  "$HOME/.local/share/flatpak/exports/bin",
+]
+
+# ---------------------------------------------------------------------------
+# Build Tools
+# ---------------------------------------------------------------------------
+
+[[tools]]
+name = "Maven"
+category = "Build Tools"
+os = "all"
+executables = ["mvn"]
+patterns = [
+  "%ProgramFiles%\\Apache\\maven\\bin",
+  "%USERPROFILE%\\scoop\\apps\\maven\\current\\bin",
+  "/opt/homebrew/bin",
+  "/usr/share/maven/bin",
+]
+
+[[tools]]
+name = "Gradle"
+category = "Build Tools"
+os = "all"
+executables = ["gradle"]
+patterns = [
+  "%USERPROFILE%\\.gradle\\bin",
+  "%USERPROFILE%\\scoop\\apps\\gradle\\current\\bin",
+  "$HOME/.gradle/bin",
+]
+
+[[tools]]
+name = "Bazel"
+category = "Build Tools"
+os = "all"
+patterns = [
+  "%USERPROFILE%\\bin",
+  "%USERPROFILE%\\scoop\\apps\\bazel\\current",
+  "$HOME/bin",
+  "/usr/local/bin",
+]

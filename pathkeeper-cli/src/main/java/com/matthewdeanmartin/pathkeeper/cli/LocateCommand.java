@@ -1,9 +1,13 @@
 package com.matthewdeanmartin.pathkeeper.cli;
 
+import com.matthewdeanmartin.pathkeeper.config.AppDirs;
+import com.matthewdeanmartin.pathkeeper.diagnostics.Diagnostics;
+import com.matthewdeanmartin.pathkeeper.locate.Locator;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 @Command(
@@ -20,8 +24,16 @@ public class LocateCommand implements Callable<Integer> {
     boolean all;
 
     @Override
-    public Integer call() {
-        System.err.println("[locate] Not yet implemented.");
-        return 1;
+    public Integer call() throws Exception {
+        AppDirs.ensureAppState();
+        String osName = Diagnostics.normalizedOsName();
+        List<String> found = Locator.locate(name, all, osName);
+
+        if (found.isEmpty()) {
+            System.out.println(name + ": not found");
+            return 1;
+        }
+        found.forEach(System.out::println);
+        return 0;
     }
 }
