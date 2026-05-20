@@ -11,7 +11,9 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.ParentCommand;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 @Command(
@@ -49,6 +51,16 @@ public class InspectCommand implements Callable<Integer> {
             .filter(e -> !onlyInvalid || (!e.exists() || !e.isDir()) && !e.isEmpty())
             .filter(e -> !onlyDupes  || e.isDuplicate())
             .toList();
+
+        if (json) {
+            Map<String, Object> payload = new LinkedHashMap<>();
+            payload.put("entries", entries);
+            payload.put("summary", report.summary());
+            payload.put("os_name", report.osName());
+            payload.put("path_length", report.pathLength());
+            CliJson.print(payload);
+            return 0;
+        }
 
         System.out.printf("%-5s %-8s %-6s %-5s %-5s  %s%n",
             "#", "scope", "exists", "dir", "dupe", "path");

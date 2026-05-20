@@ -11,7 +11,9 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.ParentCommand;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 @Command(
@@ -42,6 +44,16 @@ public class DoctorCommand implements Callable<Integer> {
         DiagnosticReport report = Diagnostics.analyzeSnapshot(
             snapshot.systemPath(), snapshot.userPath(), osName, s, rawValue);
         List<DoctorCheck> checks = Diagnostics.doctorChecks(report);
+
+        if (json) {
+            Map<String, Object> payload = new LinkedHashMap<>();
+            payload.put("checks", checks);
+            payload.put("summary", report.summary());
+            payload.put("os_name", report.osName());
+            payload.put("path_length", report.pathLength());
+            CliJson.print(payload);
+            return 0;
+        }
 
         boolean anyFail = false;
         for (DoctorCheck check : checks) {

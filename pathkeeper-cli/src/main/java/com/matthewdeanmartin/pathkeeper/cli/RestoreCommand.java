@@ -15,7 +15,6 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -38,6 +37,9 @@ public class RestoreCommand implements Callable<Integer> {
     @Option(names = {"--scope"}, description = "system, user, or all (default: all)", defaultValue = "all")
     String scope;
 
+    @Option(names = {"--force"}, description = "Apply the restore without prompting")
+    boolean force;
+
     @Override
     public Integer call() throws Exception {
         AppDirs.ensureAppState();
@@ -49,8 +51,10 @@ public class RestoreCommand implements Callable<Integer> {
         Snapshot current     = PathReaders.create().readSnapshotVar(parent.varName);
 
         // Pre-restore backup
-        Optional<Path> preBackup = BackupStore.create(current, backupDir, "auto", "pre-restore", false);
-        preBackup.ifPresent(p -> System.out.println("Pre-restore backup: " + p));
+        if (!dryRun) {
+            Optional<Path> preBackup = BackupStore.create(current, backupDir, "auto", "pre-restore", false);
+            preBackup.ifPresent(p -> System.out.println("Pre-restore backup: " + p));
+        }
 
         List<String> restoredSystem = (s == Scope.USER) ? current.systemPath() : record.systemPath;
         List<String> restoredUser   = (s == Scope.SYSTEM) ? current.userPath() : record.userPath;

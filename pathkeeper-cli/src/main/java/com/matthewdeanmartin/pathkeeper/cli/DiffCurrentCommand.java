@@ -9,6 +9,7 @@ import com.matthewdeanmartin.pathkeeper.diagnostics.Scope;
 import com.matthewdeanmartin.pathkeeper.diff.PathDiff;
 import com.matthewdeanmartin.pathkeeper.platform.PathReaders;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
@@ -26,17 +27,21 @@ public class DiffCurrentCommand implements Callable<Integer> {
     @Parameters(index = "0", description = "Backup identifier (default: latest)", arity = "0..1", defaultValue = "")
     String identifier;
 
+    @Option(names = {"--scope"}, description = "system, user, or all (default: all)", defaultValue = "all")
+    String scope;
+
     @Override
     public Integer call() throws Exception {
         AppDirs.ensureAppState();
         String osName = Diagnostics.normalizedOsName();
         var backupDir = AppDirs.backupsHome();
+        Scope selectedScope = Scope.parse(scope);
 
         BackupRecord record = BackupStore.resolve(identifier, backupDir);
         Snapshot current   = PathReaders.create().readSnapshotVar(parent.varName);
 
-        var backupEntries  = Diagnostics.entriesForScope(Scope.ALL, record.systemPath, record.userPath);
-        var currentEntries = Diagnostics.entriesForScope(Scope.ALL, current.systemPath(), current.userPath());
+        var backupEntries  = Diagnostics.entriesForScope(selectedScope, record.systemPath, record.userPath);
+        var currentEntries = Diagnostics.entriesForScope(selectedScope, current.systemPath(), current.userPath());
 
         PathDiff diff = PathDiff.compute(backupEntries, currentEntries, osName);
         System.out.println(diff.render());

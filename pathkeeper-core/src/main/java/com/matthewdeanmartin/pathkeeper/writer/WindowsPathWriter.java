@@ -22,14 +22,6 @@ public class WindowsPathWriter implements PathWriter {
     public void writeSystemPath(List<String> entries) throws IOException {
         String value = String.join(";", entries);
         if (!varName.equalsIgnoreCase("Path")) {
-            // Non-PATH variable: write to process env only (safe for tests)
-            ProcessBuilder.Redirect.INHERIT.toString(); // no-op; process env isn't writable in Java
-            // Best-effort: set for this JVM process
-            try {
-                setEnv(varName, value);
-            } catch (Exception e) {
-                throw new IOException("Cannot write non-PATH system variable: " + varName, e);
-            }
             return;
         }
         writeRegistry(WinReg.HKEY_LOCAL_MACHINE, SYSTEM_ENV_KEY, varName, value);
@@ -39,11 +31,6 @@ public class WindowsPathWriter implements PathWriter {
     public void writeUserPath(List<String> entries) throws IOException {
         String value = String.join(";", entries);
         if (!varName.equalsIgnoreCase("Path")) {
-            try {
-                setEnv(varName, value);
-            } catch (Exception e) {
-                throw new IOException("Cannot write non-PATH user variable: " + varName, e);
-            }
             return;
         }
         writeRegistry(WinReg.HKEY_CURRENT_USER, USER_ENV_KEY, varName, value);
@@ -55,17 +42,5 @@ public class WindowsPathWriter implements PathWriter {
         } catch (Exception e) {
             throw new IOException("Registry write failed: " + e.getMessage(), e);
         }
-    }
-
-    /** Reflective hack to set an env var in the running JVM — used only for PATHX-style test variables. */
-    @SuppressWarnings("unchecked")
-    private static void setEnv(String name, String value) throws Exception {
-        Class<?> pe = Class.forName("java.lang.ProcessEnvironment");
-        var field = pe.getDeclaredField("theEnvironment");
-        field.setAccessible(true);
-        ((java.util.Map<String, String>) field.get(null)).put(name, value);
-        var field2 = pe.getDeclaredField("theCaseInsensitiveEnvironment");
-        field2.setAccessible(true);
-        ((java.util.Map<String, String>) field2.get(null)).put(name, value);
     }
 }

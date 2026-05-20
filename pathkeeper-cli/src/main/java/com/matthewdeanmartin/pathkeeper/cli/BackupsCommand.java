@@ -11,7 +11,9 @@ import picocli.CommandLine.ParentCommand;
 import java.nio.file.Path;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 @Command(
@@ -41,6 +43,9 @@ public class BackupsCommand implements Callable<Integer> {
         @Option(names = {"--json"}, description = "Output as JSON")
         boolean json;
 
+        @Option(names = {"--limit"}, description = "Maximum number of backups to show")
+        Integer limit;
+
         private static final DateTimeFormatter FMT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault());
 
@@ -48,8 +53,15 @@ public class BackupsCommand implements Callable<Integer> {
         public Integer call() throws Exception {
             AppDirs.ensureAppState();
             List<BackupRecord> records = BackupStore.list(AppDirs.backupsHome());
+            if (limit != null && limit >= 0 && records.size() > limit) {
+                records = records.subList(0, limit);
+            }
             if (records.isEmpty()) {
                 System.out.println("No backups found.");
+                return 0;
+            }
+            if (json) {
+                CliJson.print(records);
                 return 0;
             }
             int i = 1;
@@ -75,11 +87,22 @@ public class BackupsCommand implements Callable<Integer> {
         @Option(names = {"--scope"}, description = "system, user, or all (default: all)", defaultValue = "all")
         String scope;
 
+        @Option(names = {"--json"}, description = "Output as JSON")
+        boolean json;
+
         @Override
         public Integer call() throws Exception {
             AppDirs.ensureAppState();
             Path backupDir = AppDirs.backupsHome();
             BackupRecord record = BackupStore.resolve(identifier, backupDir);
+
+            if (json) {
+                Map<String, Object> payload = new LinkedHashMap<>();
+                payload.put("backup", record);
+                payload.put("scope", scope);
+                CliJson.print(payload);
+                return 0;
+            }
 
             System.out.println("Backup: " + Path.of(record.sourcePath).getFileName());
             System.out.println("Timestamp: " + record.timestamp);

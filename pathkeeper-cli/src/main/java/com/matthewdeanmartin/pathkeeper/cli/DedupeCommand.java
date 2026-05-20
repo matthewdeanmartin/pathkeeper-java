@@ -38,6 +38,9 @@ public class DedupeCommand implements Callable<Integer> {
     @Option(names = {"--dry-run"}, description = "Show what would change without writing")
     boolean dryRun;
 
+    @Option(names = {"--force"}, description = "Apply changes without prompting")
+    boolean force;
+
     @Override
     public Integer call() throws Exception {
         AppDirs.ensureAppState();

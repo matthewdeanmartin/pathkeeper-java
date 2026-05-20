@@ -23,6 +23,9 @@ public class UnixPathWriter implements PathWriter {
 
     @Override
     public void writeUserPath(List<String> entries) throws IOException {
+        if (!"PATH".equalsIgnoreCase(varName)) {
+            return;
+        }
         String value = String.join(":", entries);
         try {
             setEnv(varName, value);

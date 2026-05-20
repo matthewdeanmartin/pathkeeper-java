@@ -30,11 +30,21 @@ public class BackupCommand implements Callable<Integer> {
     @Option(names = {"--force", "-f"}, description = "Create even if PATH is unchanged")
     boolean force;
 
+    @Option(names = {"--dry-run"}, description = "Show what would be backed up without writing")
+    boolean dryRun;
+
     @Override
     public Integer call() throws Exception {
         AppDirs.ensureAppState();
         Snapshot snapshot = PathReaders.create().readSnapshotVar(parent.varName);
         Path backupDir = AppDirs.backupsHome();
+
+        if (dryRun) {
+            System.out.println("Would create a backup for " + parent.varName + " in " + backupDir);
+            System.out.println("System entries: " + snapshot.systemPath().size());
+            System.out.println("User entries: " + snapshot.userPath().size());
+            return 0;
+        }
 
         Optional<Path> result = BackupStore.create(snapshot, backupDir, tag, note, force);
         if (result.isPresent()) {

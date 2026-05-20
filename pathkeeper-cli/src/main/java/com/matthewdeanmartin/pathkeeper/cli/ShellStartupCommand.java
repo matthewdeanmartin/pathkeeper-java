@@ -21,10 +21,16 @@ public class ShellStartupCommand implements Callable<Integer> {
     @Option(names = {"--remove"}, description = "Remove the hook instead of adding it")
     boolean remove;
 
+    @Option(names = {"--shell"}, description = "Shell type to target (bash, zsh, powershell)")
+    String shell;
+
+    @Option(names = {"--rc-file"}, description = "Explicit shell startup file to modify")
+    Path rcFile;
+
     @Override
     public Integer call() throws Exception {
         if (remove) {
-            Optional<Path> removed = ShellStartup.uninstall(dryRun);
+            Optional<Path> removed = ShellStartup.uninstall(dryRun, shell, rcFile);
             if (removed.isPresent()) {
                 System.out.println("Hook removed from " + removed.get());
             } else {
@@ -34,13 +40,13 @@ public class ShellStartupCommand implements Callable<Integer> {
         }
 
         // Check current status first
-        Optional<Path> existing = ShellStartup.detect();
+        Optional<Path> existing = ShellStartup.detect(shell, rcFile);
         if (existing.isPresent()) {
             System.out.println("Hook already installed in " + existing.get());
             return 0;
         }
 
-        Path target = ShellStartup.install(dryRun);
+        Path target = ShellStartup.install(dryRun, shell, rcFile);
         if (!dryRun) {
             System.out.println("Hook installed in " + target);
         }

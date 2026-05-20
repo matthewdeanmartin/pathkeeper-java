@@ -40,6 +40,9 @@ public class PopulateCommand implements Callable<Integer> {
     @Option(names = {"--category"}, description = "Filter by tool category")
     String category;
 
+    @Option(names = {"--list-catalog"}, description = "List known catalog entries without discovering anything")
+    boolean listCatalog;
+
     @Override
     public Integer call() throws Exception {
         AppDirs.ensureAppState();
@@ -47,6 +50,13 @@ public class PopulateCommand implements Callable<Integer> {
         Snapshot current = PathReaders.create().readSnapshotVar(parent.varName);
 
         List<CatalogTool> tools = Populate.loadCatalog();
+        if (listCatalog) {
+            tools.stream()
+                .filter(tool -> tool.os == null || "all".equals(tool.os) || osName.equals(tool.os))
+                .filter(tool -> category == null || category.isBlank() || category.equalsIgnoreCase(tool.category))
+                .forEach(tool -> System.out.println(tool.category + ": " + tool.name));
+            return 0;
+        }
         List<String> existing = force ? List.of()
             : Diagnostics.entriesForScope(Scope.ALL, current.systemPath(), current.userPath());
         List<PopulateMatch> matches = Populate.discover(tools, existing, osName, category);

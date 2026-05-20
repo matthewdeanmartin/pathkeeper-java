@@ -2,7 +2,6 @@ package com.matthewdeanmartin.pathkeeper.populate;
 
 import com.matthewdeanmartin.pathkeeper.config.AppDirs;
 import com.matthewdeanmartin.pathkeeper.diagnostics.Diagnostics;
-import com.moandjiezana.toml.Toml;
 
 import java.io.*;
 import java.nio.file.*;
@@ -72,25 +71,187 @@ public final class Populate {
     // -------------------------------------------------------------------------
 
     private static List<CatalogTool> parseCatalog(String tomlContent) {
-        Toml toml = new Toml().read(tomlContent);
-        List<Map<String, Object>> rawTools = toml.getList("tools");
-        if (rawTools == null) return List.of();
-
         List<CatalogTool> tools = new ArrayList<>();
-        for (Map<String, Object> raw : rawTools) {
-            CatalogTool t = new CatalogTool();
-            t.name = (String) raw.get("name");
-            t.category = (String) raw.get("category");
-            t.os = (String) raw.get("os");
-            @SuppressWarnings("unchecked")
-            List<String> patterns = (List<String>) raw.get("patterns");
-            t.patterns = patterns != null ? patterns : List.of();
-            @SuppressWarnings("unchecked")
-            List<String> exes = (List<String>) raw.get("executables");
-            t.executables = exes != null ? exes : List.of();
-            tools.add(t);
+        CatalogTool current = null;
+        String pendingArrayKey = null;
+        List<String> pendingArrayValues = new ArrayList<>();
+
+        for (String rawLine : tomlContent.split("\\R")) {
+            String line = stripComments(rawLine).trim();
+            if (line.isEmpty()) {
+                continue;
+            }
+            if ("[[tools]]".equals(line)) {
+                if (current != null) {
+                    tools.add(normalizeTool(current));
+                }
+                current = new CatalogTool();
+                pendingArrayKey = null;
+                pendingArrayValues = new ArrayList<>();
+                continue;
+            }
+            if (current == null) {
+                continue;
+            }
+
+            if (pendingArrayKey != null) {
+                pendingArrayValues.addAll(parseArrayItems(line));
+                if (line.contains("]")) {
+                    assignArray(current, pendingArrayKey, pendingArrayValues);
+                    pendingArrayKey = null;
+                    pendingArrayValues = new ArrayList<>();
+                }
+                continue;
+            }
+
+            int eq = line.indexOf('=');
+            if (eq < 0) {
+                continue;
+            }
+
+            String key = line.substring(0, eq).trim();
+            String value = line.substring(eq + 1).trim();
+            if (value.startsWith("[")) {
+                pendingArrayKey = key;
+                pendingArrayValues.addAll(parseArrayItems(value.substring(1)));
+                if (value.contains("]")) {
+                    assignArray(current, pendingArrayKey, pendingArrayValues);
+                    pendingArrayKey = null;
+                    pendingArrayValues = new ArrayList<>();
+                }
+                continue;
+            }
+
+            assignScalar(current, key, parseString(value));
         }
-        return tools;
+
+        if (current != null) {
+            if (pendingArrayKey != null) {
+                assignArray(current, pendingArrayKey, pendingArrayValues);
+            }
+            tools.add(normalizeTool(current));
+        }
+        return tools.stream().filter(tool -> tool.name != null && !tool.name.isBlank()).toList();
+    }
+
+    private static CatalogTool normalizeTool(CatalogTool tool) {
+        tool.patterns = tool.patterns != null ? tool.patterns : List.of();
+        tool.executables = tool.executables != null ? tool.executables : List.of();
+        return tool;
+    }
+
+    private static void assignScalar(CatalogTool tool, String key, String value) {
+        switch (key) {
+            case "name" -> tool.name = value;
+            case "category" -> tool.category = value;
+            case "os" -> tool.os = value;
+            default -> {
+            }
+        }
+    }
+
+    private static void assignArray(CatalogTool tool, String key, List<String> values) {
+        List<String> items = List.copyOf(values);
+        switch (key) {
+            case "patterns" -> tool.patterns = items;
+            case "executables" -> tool.executables = items;
+            default -> {
+            }
+        }
+    }
+
+    private static String stripComments(String line) {
+        boolean inQuotes = false;
+        for (int i = 0; i < line.length(); i++) {
+            char c = line.charAt(i);
+            if (c == '"' && (i == 0 || line.charAt(i - 1) != '\\')) {
+                inQuotes = !inQuotes;
+            } else if (c == '#' && !inQuotes) {
+                return line.substring(0, i);
+            }
+        }
+        return line;
+    }
+
+    private static List<String> parseArrayItems(String value) {
+        String trimmed = value.trim();
+        if (trimmed.endsWith("]")) {
+            trimmed = trimmed.substring(0, trimmed.length() - 1).trim();
+        }
+        if (trimmed.isEmpty()) {
+            return List.of();
+        }
+
+        List<String> items = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        boolean inQuotes = false;
+        boolean escaping = false;
+        for (int i = 0; i < trimmed.length(); i++) {
+            char c = trimmed.charAt(i);
+            if (!inQuotes) {
+                if (c == '"') {
+                    inQuotes = true;
+                    current.setLength(0);
+                }
+                continue;
+            }
+            if (escaping) {
+                current.append(unescape(c));
+                escaping = false;
+                continue;
+            }
+            if (c == '\\') {
+                escaping = true;
+                continue;
+            }
+            if (c == '"') {
+                items.add(current.toString());
+                inQuotes = false;
+                continue;
+            }
+            current.append(c);
+        }
+        return items;
+    }
+
+    private static String parseString(String value) {
+        String trimmed = value.trim();
+        if (trimmed.endsWith(",")) {
+            trimmed = trimmed.substring(0, trimmed.length() - 1).trim();
+        }
+        if (trimmed.length() >= 2 && trimmed.startsWith("\"") && trimmed.endsWith("\"")) {
+            trimmed = trimmed.substring(1, trimmed.length() - 1);
+        }
+        StringBuilder parsed = new StringBuilder();
+        boolean escaping = false;
+        for (int i = 0; i < trimmed.length(); i++) {
+            char c = trimmed.charAt(i);
+            if (escaping) {
+                parsed.append(unescape(c));
+                escaping = false;
+            } else if (c == '\\') {
+                escaping = true;
+            } else {
+                parsed.append(c);
+            }
+        }
+        if (escaping) {
+            parsed.append('\\');
+        }
+        return parsed.toString();
+    }
+
+    private static char unescape(char c) {
+        return switch (c) {
+            case 'b' -> '\b';
+            case 'f' -> '\f';
+            case 'n' -> '\n';
+            case 'r' -> '\r';
+            case 't' -> '\t';
+            case '"' -> '"';
+            case '\\' -> '\\';
+            default -> c;
+        };
     }
 
     private static String expandPattern(String pattern) {
@@ -125,7 +286,7 @@ public final class Populate {
         }
         int lastSep = Math.max(pattern.lastIndexOf('/'), pattern.lastIndexOf('\\'));
         String root = lastSep > 0 ? pattern.substring(0, lastSep) : ".";
-        String glob  = "glob:" + pattern.replace("\\", "/");
+        // String glob  = "glob:" + pattern.replace("\\", "/");
 
         // Find non-glob root
         int nonGlobEnd = -1;
